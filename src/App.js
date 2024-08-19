@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [config, setConfig] = useState(false)
@@ -19,6 +19,12 @@ function App() {
     window.api.saveConfig()
   }
 
+  useEffect(()=>{
+
+    window.api.requestAudio()
+    console.log('testa')
+  },[])
+//
   return (
     <div className="App">
       {config ?
@@ -35,6 +41,10 @@ function App() {
         <button onClick={quitBtnHandler}>Stop </button>
         <button>Pause </button>
         <button onClick={()=>{setConfig(!config)}}>Configuration </button>
+        <div style={{display:'none'}}>
+        {}
+          <audio src= {process.env.PUBLIC_URL+ 'test.mp3'} controls autoPlay/>
+        </div>
       </>
       }
     </div>

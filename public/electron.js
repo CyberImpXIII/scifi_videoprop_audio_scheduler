@@ -47,24 +47,29 @@ app.whenReady().then(async () => {
 ipcMain.on('quit-app',(args_=>{
   app.quit();
 }))
+
 ipcMain.on('config-dir-set',(args_=>{
  audioDir = dialog.showOpenDialogSync({ properties: ['openDirectory']})
 }))
+
 ipcMain.on('load-config',(args)=>{
-  let temp = dialog.showOpenDialogSync({ 
+  let dataObj = JSON.parse(readFileSync(dialog.showOpenDialogSync({ 
     properties: ['openFile']
-  })[0]
-  readFileSync( temp, (err, data) => {
-    if (err) throw err;
-    console.log(`test ${data}`);
-  }); 
-})
+  })[0], 'utf8'));
+
+  if(dataObj){
+    audioDir = dataObj.audioDirectory
+    configLocation = dataObj.configFileLocation
+  }
+  })
+
 ipcMain.on('save-config',(args)=>{
   configLocation = dialog.showOpenDialogSync({ properties: ['openDirectory']})
   writeFileSync(`${configLocation}/config.JSON`, `{
-    audioDirectory: '${audioDir}',
-    configFileLocation: '${configLocation}'
-  }`, (err) => {
+    "audioDirectory": "${audioDir}",
+    "configFileLocation": "${configLocation}"
+  }`
+  , (err) => {
     if (err) throw err;
     console.log('The file has been saved!');
   })

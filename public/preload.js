@@ -11,6 +11,6 @@ contextBridge.exposeInMainWorld('api', {
   testReceive: (callback) => ipcRenderer.on('test-receive', (event, data) => { callback(data) }),
   configDirSet:(args)=> ipcRenderer.send('config-dir-set', args),
   loadConfig:(args)=>{ ipcRenderer.send('load-config', args) },
-  saveConfig:(args)=>{ ipcRenderer.send('save-config', args) }
-
+  saveConfig:(args)=>{ ipcRenderer.send('save-config', args) },
+  requestAudio:(args)=>{ ipcRenderer.send('requestAudio', args) }
 });
