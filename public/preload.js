@@ -8,9 +8,9 @@ contextBridge.exposeInMainWorld('api', {
   //quit app
   quitApp: (args)=> ipcRenderer.send('quit-app', args),
   // Receive Methods
-  testReceive: (callback) => ipcRenderer.on('test-receive', (event, data) => { callback(data) }),
+  mediaArrayReceive: (callback) => ipcRenderer.on('media-array-recieve', (event, data) => { callback(data) }),
   configDirSet:(args)=> ipcRenderer.send('config-dir-set', args),
   loadConfig:(args)=>{ ipcRenderer.send('load-config', args) },
   saveConfig:(args)=>{ ipcRenderer.send('save-config', args) },
-  requestAudio:(args)=>{ ipcRenderer.send('requestAudio', args) }
+  requestAudio:(args)=>{ ipcRenderer.send('request-audio', args) }
 });
