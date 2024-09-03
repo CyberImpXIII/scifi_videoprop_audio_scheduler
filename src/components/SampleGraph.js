@@ -6,7 +6,6 @@ var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
 const SampleGraph = (props)=>{
-	console.log(props.slider)
 	const [speed, setSpeed] = useState(1)
 	const [timer, setTimer] = useState();
 	const [graphData, setGraphData] = useState({
