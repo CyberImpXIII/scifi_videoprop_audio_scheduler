@@ -2,7 +2,7 @@
   "name": "bratsciencevideoprop",
   "version": "0.1.0",
   "private": true,
-  "main": "public/electron.js",
+  "main": "public/electron.mjs",
   "homepage": "./",
   "build": {
     "appId": "com.bratprincess.milkingsimulator",
@@ -35,11 +35,13 @@
     }
   },
   "dependencies": {
+    "@canvasjs/react-charts": "^1.0.2",
     "@electron/remote": "^2.1.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "electron-is-dev": "^3.0.1",
+    "electron-store": "^10.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-player": "^2.16.0",
