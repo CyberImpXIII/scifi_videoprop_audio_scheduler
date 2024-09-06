@@ -36,7 +36,7 @@ function App() {
     
     <div className="App">
       {config ?
-      <Config mediaArray={mediaArray} config={config} setConfig={setConfig}/>
+      <Config mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
       :
       <DemoMode mediaArray={mediaArray} setConfig={setConfig} config={config} buttonState={buttonState} audioVisibilityHandler={audioVisibilityHandler}/>
       }

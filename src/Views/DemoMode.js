@@ -17,10 +17,10 @@ const DemoMode = ({setConfig, config, buttonState, audioVisibilityHandler, media
             {mediaArray.map((element, index, array)=>{
             let buttonTitle = element.split('/')[element.split('/').length - 1]
             return(
-            <div key={`${index}audioWrapper`}>
-                <button onClick={()=>{audioVisibilityHandler(index)}}>{buttonTitle.split(".mp3")[0]}</button>
-                <audio id={`audioPlayer${index}`} onEnded={()=>{clipEndHandler(index, audioVisibilityHandler)}} style={buttonState[index]?{display:'block'}:{display:'none'}} key={`${index}audioElement`} src= {element} controls />    
-            </div>
+                <div key={`${index}audioWrapper`}>
+                    <button onClick={()=>{audioVisibilityHandler(index)}}>{buttonTitle.split(".mp3")[0]}</button>
+                    <audio id={`audioPlayer${index}`} onEnded={()=>{clipEndHandler(index, audioVisibilityHandler)}} style={buttonState[index]?{display:'block'}:{display:'none'}} key={`${index}audioElement`} src= {element} controls />    
+                </div>
             )})}
             <Slider sliderVal={sliderVal} sliderHandle={(e)=>{sliderHandle(e, setSliderVal)}}/>
             <SampleGraph slider={sliderVal}/>  

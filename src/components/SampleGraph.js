@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react'
 import CanvasJSReact from '@canvasjs/react-charts';
-//var CanvasJSReact = require('@canvasjs/react-charts');
  
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -43,7 +42,6 @@ const SampleGraph = (props)=>{
 	})
 	useEffect(()=>{
 		clearInterval(timer)
-		console.log(props.slider, "slider", 1000*(props.slider/50))
 		let tempTimer = setInterval(()=>{
 			let tempDatapoints = graphData && graphData.data[0].dataPoints.slice();
 			tempDatapoints.push(tempDatapoints.shift());
