@@ -1,0 +1,15 @@
+.audioRow{
+    display:flex;
+    margin-left: 25px;
+    padding-top:5px;
+    padding-bottom:5px;
+    border: black solid 1px;
+}
+
+.rowOne{
+    border-right: black solid 1px;
+}
+
+.audioRow{
+    margin-right:25px;
+}

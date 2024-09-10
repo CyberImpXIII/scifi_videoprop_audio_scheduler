@@ -1,7 +1,10 @@
 import loadBtnHandler from '../functions/loadBtnHandler'
 import saveBtnHandler from '../functions/saveBtnHandler'
 import configDirSet from '../functions/configDirSet'
-import { useRef, useState, createRef, useEffect, useCallback } from 'react'
+import { useRef, useState, createRef, useEffect } from 'react'
+import '../styles/config.css'
+
+
 const Config = ({setView, setConfig, config, mediaArray})=>{
 
     const [elementsRef, setElementsRef] = useState(useRef(mediaArray.map(() => createRef())));
@@ -15,21 +18,27 @@ const Config = ({setView, setConfig, config, mediaArray})=>{
             mediaArray.map((element, index, array)=>{
                     tempElementsContext.push({
                         track: baseContext.createMediaElementSource(elementsRef.current[index].current),
-                        playing:false
+                        playing:false,
+                        function:'none'
                     });
                     tempElementsContext[index].track.connect(baseContext.destination);
             })
             setElementsContext([...tempElementsContext]);
         }
-    }, [elementsRef, mediaArray, elementsContext]);
+        return ()=>{}
+    }, [elementsRef, mediaArray, elementsContext, baseContext]);
+
+    const changeHandler  =()=>{
+        console.log('test')
+    }
 
     const playhandler = (e, index)=>{
-         // Check if context is in suspended state (autoplay policy)
+        // Check if context is in suspended state (autoplay policy)
         if (baseContext.state === "suspended") {
             baseContext.resume();
         }
         let tempElementsContext = elementsContext.slice()
-    // Play or pause track depending on state
+        // Play or pause track depending on state
         if (elementsContext[index].playing === false) {
             elementsRef.current[index].current.play();
             tempElementsContext[index].playing = !tempElementsContext[index].playing
@@ -51,14 +60,26 @@ const Config = ({setView, setConfig, config, mediaArray})=>{
             {mediaArray.map((element, index, array)=>{
                 let buttonTitle = element.split('/')[element.split('/').length - 1]
                 return(
-                    <div key={`${index}audioWrapper`}>
-                        <div >
-                            <button onClick={(e)=>{playhandler(e, index)}}>
+                    <div key={`${index}audioWrapper`} className='audioRow'>
+                            <button className="rowOne audioRow" onClick={(e)=>{playhandler(e, index)}}>
                                 {buttonTitle.split(".mp3")[0]}
                             </button>
-                            <audio style={{display:'none'}}ref={elementsRef.current[index]} id={`audioPlayer${index}`} key={`${index}audioElement`} src={element} controls />    
-                        </div>
-                        {(element.split('/')[element.split('/').length - 1]).split('.mp3')[0]}
+                            <div className='dropdown functionalityCategory'>
+                            <select onChange={changeHandler} name="functionSelect" className="functionSelect">
+                                <option value="none" selected>nothing happens</option>
+                                <option value="once">Play once on play button start</option>
+                                <option value="timer">Play on timer</option>
+                                <option value="delayOnce">Play on ms delay on play button start</option>
+                                <option value="delayTimer">Play on timer after delay</option>
+                                <option value="sliderDecrease">Play on slider value decrease</option>
+                                <option value="sliderIncrease">Play on slider value increase</option>
+                                <option value="sliderDecreaseDelay">Play on slider value decrease after delay</option>
+                                <option value="sliderIncreaseDelay">Play on slider value increase after delay</option>
+                                <option value="sliderDecreaseTimer">Play on slider value decrease on timer</option>
+                                <option value="sliderIncreaseTimer">Play on slider value increase on timer</option>
+                            </select>
+                            </div>
+                            <audio style={{display:'none'}}ref={elementsRef.current[index]} id={`audioPlayer${index}`} key={`${index}audioElement`} src={element} controls />   
                     </div>
                     );
             })}
