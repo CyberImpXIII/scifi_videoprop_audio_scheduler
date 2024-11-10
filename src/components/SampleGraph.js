@@ -4,7 +4,7 @@ import CanvasJSReact from '@canvasjs/react-charts';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
-const SampleGraph = (props)=>{
+const SampleGraph = ({slider, amount})=>{
 	const [speed, setSpeed] = useState(1)
 	const [timer, setTimer] = useState();
 	const [graphData, setGraphData] = useState({
@@ -52,12 +52,15 @@ const SampleGraph = (props)=>{
 				theme:"light2",
 				data: tempData
 			})
-		}, (1000*(props.slider/50)))
+		}, (1000*(slider/50)))
 		setTimer(tempTimer);
-	},[props.slider])
+	},[slider])
 
 		return (
 		<div>
+			<>
+				{amount}
+			</>
 			<CanvasJSChart options = {graphData}
 				/* onRef={ref => this.chart = ref} */
 			/>
