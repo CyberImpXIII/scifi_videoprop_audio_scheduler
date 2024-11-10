@@ -1,13 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import Config from './Views/Config'
-import DemoMode from './Views/DemoMode';
+import MainPage from './Views/MainPage';
 
 function App() {
   const [config, setConfig] = useState(false)
   const [mediaArray, setMediaArray] = useState([process.env.PUBLIC_URL+ 'test.mp3'])
   const [buttonState, setButtonState] = useState({})
-
+  const [rulesArray, setRulesArray]= useState([])
+  const baseContext = new AudioContext()
 
   const audioVisibilityHandler =(prop)=>{
     let newButton = {...buttonState}
@@ -16,11 +17,15 @@ function App() {
   }
 
   useEffect(()=>{
-    window.api.mediaArrayReceive((data)=>{
-      // console.log(`recieved data: ${data}`)
-      setMediaArray(data);
-    })
-    window.api.requestAudio();
+    window.api ? (
+      window.api.mediaArrayReceive((data)=>{
+        setMediaArray(data);
+      })
+     ) : ( console.log('electron not loaded'))
+
+     window.api ? 
+      (window.api.requestAudio()) : 
+      (console.log('electron not loaded'))
   },[])
 
   useEffect(()=>{
@@ -31,14 +36,12 @@ function App() {
     setButtonState(tempButtonState)
   },[mediaArray])
 
-  // console.log(buttonState)
   return (
-    
-    <div className="App">
+    <div className="App" style={{position:'absolute', width:'100%'}}>
       {config ?
-      <Config mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
+      <Config rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
       :
-      <DemoMode mediaArray={mediaArray} setConfig={setConfig} config={config} buttonState={buttonState} audioVisibilityHandler={audioVisibilityHandler}/>
+      <MainPage baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState} />
       }
     </div>
   );
