@@ -32,6 +32,11 @@
   color: #61dafb;
 }
 
+svg{
+  transform: scaleY(-1);
+
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
