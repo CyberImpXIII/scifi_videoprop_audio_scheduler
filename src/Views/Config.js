@@ -1,88 +1,150 @@
 import loadBtnHandler from '../functions/loadBtnHandler'
 import saveBtnHandler from '../functions/saveBtnHandler'
 import configDirSet from '../functions/configDirSet'
-import { useRef, useState, createRef, useEffect } from 'react'
 import '../styles/config.css'
 
 
-const Config = ({setView, setConfig, config, mediaArray})=>{
+const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
+    const functionArray = [{value:'none', description: 'nothing happens'},
+        {value:'once', description:'Play once on play button start'},
+        {value:'timer', description:'Play on timer'},
+        {value:'delayOnce', description:'Play on ms delay on play button start'},
+        {value:'delayTimer', description:'Play on timer after delay'},
+        {value:'sliderDecrease', description:'Play on slider value decrease'},
+        {value:'sliderIncrease', description:'Play on slider value increase'},
+        {value:'sliderDecreaseDelay', description:'Play on slider value decrease after delay'},
+        {value:'sliderIncreaseDelay', description:'Play on slider value increase after delay'},
+        {value:'sliderDecreaseTimer', description:'Play on slider value decrease on timer'},
+        {value:'sliderIncreaseTimer', description:'Play on slider value increase on timer'},
+        {value:'none', description:'----------------------'},
+        {value:'counterUpdate', description:'Set the polling rate (How many times per second) the counter refreshes'},
+        {value:'counterRate', description:'Set the amount per time that the counter increases by (how much per refresh)'},
+        {value:'setMax', description:'Set the amount per time that the counter increases by (how much per refresh)'},
+        {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
+        {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
 
-    const [elementsRef, setElementsRef] = useState(useRef(mediaArray.map(() => createRef())));
-    const [elementsContext, setElementsContext] = useState([])
-    const baseContext = new AudioContext()
+        {value:'', description:''}
+    ]
 
 
-    useEffect(() => {
-        if (Array.isArray(elementsRef.current) && elementsRef.current[0] && elementsRef.current[0].current !== null && elementsContext.length === 0) {
-            let tempElementsContext = []
-            mediaArray.map((element, index, array)=>{
-                    tempElementsContext.push({
-                        track: baseContext.createMediaElementSource(elementsRef.current[index].current),
-                        playing:false,
-                        function:'none'
-                    });
-                    tempElementsContext[index].track.connect(baseContext.destination);
-            })
-            setElementsContext([...tempElementsContext]);
-        }
-        return ()=>{}
-    }, [elementsRef, mediaArray, elementsContext, baseContext]);
 
-    const changeHandler  =()=>{
-        console.log('test')
+
+    const functionChangeHandler  =(e)=>{
+        console.log(e.target.value)
     }
 
-    const playhandler = (e, index)=>{
-        // Check if context is in suspended state (autoplay policy)
-        if (baseContext.state === "suspended") {
-            baseContext.resume();
-        }
-        let tempElementsContext = elementsContext.slice()
-        // Play or pause track depending on state
-        if (elementsContext[index].playing === false) {
-            elementsRef.current[index].current.play();
-            tempElementsContext[index].playing = !tempElementsContext[index].playing
-            setElementsContext(tempElementsContext)
-        } else if (elementsContext[index].playing === true) {
-            elementsRef.current[index].current.pause();
-            tempElementsContext[index].playing = !tempElementsContext[index].playing
-            setElementsContext(tempElementsContext)
-        }
+    const addRule = ()=>{
+        let temp = rulesArray.slice()
+        temp.push({file:'none', function:'none'});
+        setRulesArray([...temp])
     }
+
+    const removeRule = (index)=>{
+        let temp = rulesArray.slice()   
+        temp.splice(index, 1)
+        setRulesArray([...temp])
+    }
+
+    const changeFile = (index, mediaIndex)=>{
+        let temp = rulesArray.slice()
+        temp[index].file = mediaArray[mediaIndex]
+        console.log(temp, 'temp', rulesArray, 'ra')
+        setRulesArray([...temp])    
+    }
+
+    const changeFunction = (index, functionIndex)=>{
+        let temp = rulesArray.slice()
+        temp[index].function = functionArray[functionIndex]['value']
+        setRulesArray([...temp])   
+    }
+
+    const changeValueOne = (index, value)=>{
+        let temp = rulesArray.slice()
+        temp[index].valueOne = value
+        console.log(rulesArray,"rulesArray", temp, "temp")
+        setRulesArray([...temp])   
+    }
+
+    const changeValueTwo = (index, value)=>{
+        let temp = rulesArray.slice()
+        temp[index].valueTwo = value
+        console.log(rulesArray,"rulesArray", temp, "temp")
+        setRulesArray([...temp])   
+    }
+
+
+  
     return(
     <>
         <button key='loadbutton' onClick={loadBtnHandler}>Load</button>
-        <button key='savebutton' onClick={saveBtnHandler}>Save</button>
+        <button key='savebutton' onClick={()=>{saveBtnHandler(rulesArray)}}>Save</button>
         <button key='dirpathbutton' onClick={configDirSet}>Configure Directory Path</button>
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
         <div>
-            {mediaArray.map((element, index, array)=>{
-                let buttonTitle = element.split('/')[element.split('/').length - 1]
-                return(
-                    <div key={`${index}audioWrapper`} className='audioRow'>
-                            <button className="rowOne audioRow" onClick={(e)=>{playhandler(e, index)}}>
-                                {buttonTitle.split(".mp3")[0]}
-                            </button>
-                            <div className='dropdown functionalityCategory'>
-                            <select onChange={changeHandler} name="functionSelect" className="functionSelect">
-                                <option value="none" selected>nothing happens</option>
-                                <option value="once">Play once on play button start</option>
-                                <option value="timer">Play on timer</option>
-                                <option value="delayOnce">Play on ms delay on play button start</option>
-                                <option value="delayTimer">Play on timer after delay</option>
-                                <option value="sliderDecrease">Play on slider value decrease</option>
-                                <option value="sliderIncrease">Play on slider value increase</option>
-                                <option value="sliderDecreaseDelay">Play on slider value decrease after delay</option>
-                                <option value="sliderIncreaseDelay">Play on slider value increase after delay</option>
-                                <option value="sliderDecreaseTimer">Play on slider value decrease on timer</option>
-                                <option value="sliderIncreaseTimer">Play on slider value increase on timer</option>
+            {rulesArray.map((element, index, array)=>{
+                return (<div className='audioRow'>
+                    <select onChange={(e)=>{changeFile(index, e.target.value)}}>
+                        <option value={-1}>none</option>
+                        {mediaArray.map((mediaArrayFile, index, array)=>{
+                            return(
+                                <option selected={mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0] === element.file} value={index}>
+                                    {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
+                                </option>)})}
+                    </select>
+                    <select onChange={(e)=>{changeFunction(index, e.target.value)}}>
+                        {functionArray.map((functionArrayFunction, index, array)=>{
+                            return(
+                                <option value={index}>
+                                    {functionArrayFunction.description}
+                                </option>
+                            )
+                        })}
+                    </select>
+                    <>
+                    { !rulesArray[index].value === 'once' &&
+                        !rulesArray[index].value === 'sliderDecrease' &&
+                        !rulesArray[index].value === 'sliderIncrease' &&
+                    <>
+                        <select onChange={(e)=>{changeValueOne(index, e.target.value)}}>
+                            <option value='1000'>1000ms</option>
+                            <option value='2000'>2000ms</option>
+                            <option value='3000'>3000ms</option>
+                            <option value='4000'>4000ms</option>
+                            <option value='5000'>5000ms</option>
+                            <option value='6000'>6000ms</option>
+                            <option value='7000'>7000ms</option>
+                            <option value='8000'>8000ms</option>
+                            <option value='9000'>9000ms</option>
+                            <option value='10000'>10000ms</option>
+                        </select>
+                        { !rulesArray[index].value === 'timer' &&
+                            !rulesArray[index].value === 'delayOnce' &&
+                            !rulesArray[index].value === 'delayTimer' &&
+                            !rulesArray[index].value === 'sliderDecreaseTimer' &&
+                            !rulesArray[index].value === 'sliderIncreaseTimer' &&
+                            <select onChange={(e)=>{changeValueTwo(index, e.target.value)}}>
+                                <option value='1000'>1000ms</option>
+                                <option value='2000'>2000ms</option>
+                                <option value='3000'>3000ms</option>
+                                <option value='4000'>4000ms</option>
+                                <option value='5000'>5000ms</option>
+                                <option value='6000'>6000ms</option>
+                                <option value='7000'>7000ms</option>
+                                <option value='8000'>8000ms</option>
+                                <option value='9000'>9000ms</option>
+                                <option value='10000'>10000ms</option>
                             </select>
-                            </div>
-                            <audio style={{display:'none'}}ref={elementsRef.current[index]} id={`audioPlayer${index}`} key={`${index}audioElement`} src={element} controls />   
-                    </div>
-                    );
+                        }
+                    </>
+                    }
+                    </>
+                    <button onClick={()=>{removeRule(index)}}>
+                        -
+                    </button>
+                </div>)
             })}
+            <button className='addRule' onClick={addRule}>+</button>
         </div>
     </>
     )
