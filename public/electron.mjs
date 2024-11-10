@@ -57,8 +57,15 @@ app.whenReady().then(async (event) => {
     app.quit();
   }))
 
-  ipcMain.on('config-dir-set',(args_=>{
+  ipcMain.on('config-dir-set',(event, args_=>{
     audioDir = dialog.showOpenDialogSync({ properties: ['openDirectory']})
+
+    mediaFileArray = readdirSync(audioDir).map(fileName => {
+      return path.join(audioDir, fileName);
+    });
+
+    let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
+    event.sender.send('media-array-recieve', dirContents)
   }))
 
 ipcMain.on('load-config',(event, arg)=>{
@@ -79,13 +86,21 @@ ipcMain.on('load-config',(event, arg)=>{
   event.sender.send('media-array-recieve', dirContents)
 })
 
-ipcMain.on('save-config',(args)=>{
+ipcMain.on('save-config', (_event, args)=>{
+  console.log(args)
   configLocation = dialog.showOpenDialogSync({ properties: ['openDirectory']})
-  writeFileSync(`${configLocation}/config.JSON`, `{
+  let string =  `{
     "audioDirectory": "${audioDir}",
     "configFileLocation": "${configLocation}",
     "displayMode":"dev"
-  }`, (err) => {
+  `
+  if(args && args.length >0){
+    string +=`,
+    "rulesArray":${JSON.stringify(args)}`
+
+  }
+  string += `}`
+  writeFileSync(`${configLocation}/config.JSON`,string, (err) => {
     if (err) throw err;
     console.log('The file has been saved!');
     })
