@@ -17,21 +17,16 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         {value:'sliderDecreaseTimer', description:'Play on slider value decrease on timer'},
         {value:'sliderIncreaseTimer', description:'Play on slider value increase on timer'},
         {value:'none', description:'----------------------'},
+        {value:'', description:''}
+    ]
+
+    const counterFunctionArray = [
         {value:'counterUpdate', description:'Set the polling rate (How many times per second) the counter refreshes'},
         {value:'counterRate', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMax', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
-
-        {value:'', description:''}
     ]
-
-
-
-
-    const functionChangeHandler  =(e)=>{
-        console.log(e.target.value)
-    }
 
     const addRule = ()=>{
         let temp = rulesArray.slice()
@@ -48,7 +43,6 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
     const changeFile = (index, mediaIndex)=>{
         let temp = rulesArray.slice()
         temp[index].file = mediaArray[mediaIndex]
-        console.log(temp, 'temp', rulesArray, 'ra')
         setRulesArray([...temp])    
     }
 
