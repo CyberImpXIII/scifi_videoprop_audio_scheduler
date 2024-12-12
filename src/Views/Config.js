@@ -2,6 +2,7 @@ import loadBtnHandler from '../functions/loadBtnHandler'
 import saveBtnHandler from '../functions/saveBtnHandler'
 import configDirSet from '../functions/configDirSet'
 import '../styles/config.css'
+import { useState } from 'react'
 
 
 const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
@@ -17,7 +18,6 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         {value:'sliderDecreaseTimer', description:'Play on slider value decrease on timer'},
         {value:'sliderIncreaseTimer', description:'Play on slider value increase on timer'},
         {value:'none', description:'----------------------'},
-        {value:'', description:''}
     ]
 
     const counterFunctionArray = [
@@ -26,6 +26,7 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         {value:'setMax', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
+        {value:'none', description:'----------------------'}
     ]
 
     const addRule = ()=>{
@@ -54,6 +55,7 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
 
     const changeValueOne = (index, value)=>{
         let temp = rulesArray.slice()
+
         temp[index].valueOne = value
         console.log(rulesArray,"rulesArray", temp, "temp")
         setRulesArray([...temp])   
@@ -66,8 +68,8 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         setRulesArray([...temp])   
     }
 
+    let [counterSource, setCounterSource] = useState('numerical');
 
-  
     return(
     <>
         <button key='loadbutton' onClick={loadBtnHandler}>Load</button>
@@ -76,6 +78,11 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
         <div>
+        <div >Here we can change settings for the counter</div>
+        <div className='audioRow'> Polling Speed Source: <select>
+            <option> Numerical </option>
+            <option> Slider</option>
+        </select> </div>
             {rulesArray.map((element, index, array)=>{
                 return (<div className='audioRow'>
                     <select onChange={(e)=>{changeFile(index, e.target.value)}}>
@@ -96,10 +103,11 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
                         })}
                     </select>
                     <>
-                    { !rulesArray[index].value === 'once' &&
-                        !rulesArray[index].value === 'sliderDecrease' &&
-                        !rulesArray[index].value === 'sliderIncrease' &&
+                    { rulesArray[index].function !== 'once' &&
+                        rulesArray[index].function !== 'sliderDecrease' &&
+                        rulesArray[index].function !== 'sliderIncrease' &&
                     <>
+                        <input onInput={(e)=>{changeValueOne(index, e.target.value)}}></input>
                         <select onChange={(e)=>{changeValueOne(index, e.target.value)}}>
                             <option value='1000'>1000ms</option>
                             <option value='2000'>2000ms</option>
@@ -112,11 +120,11 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
                             <option value='9000'>9000ms</option>
                             <option value='10000'>10000ms</option>
                         </select>
-                        { !rulesArray[index].value === 'timer' &&
-                            !rulesArray[index].value === 'delayOnce' &&
-                            !rulesArray[index].value === 'delayTimer' &&
-                            !rulesArray[index].value === 'sliderDecreaseTimer' &&
-                            !rulesArray[index].value === 'sliderIncreaseTimer' &&
+                        { !rulesArray[index].function === 'timer' &&
+                            !rulesArray[index].function === 'delayOnce' &&
+                            !rulesArray[index].function === 'delayTimer' &&
+                            !rulesArray[index].function === 'sliderDecreaseTimer' &&
+                            !rulesArray[index].function === 'sliderIncreaseTimer' &&
                             <select onChange={(e)=>{changeValueTwo(index, e.target.value)}}>
                                 <option value='1000'>1000ms</option>
                                 <option value='2000'>2000ms</option>
