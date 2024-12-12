@@ -5,7 +5,7 @@ import '../styles/config.css'
 import { useState } from 'react'
 
 
-const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
+const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
     const functionArray = [{value:'none', description: 'nothing happens'},
         {value:'once', description:'Play once on play button start'},
         {value:'timer', description:'Play on timer'},
@@ -68,7 +68,7 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         setRulesArray([...temp])   
     }
 
-    let [counterSource, setCounterSource] = useState('numerical');
+
 
     return(
     <>
@@ -78,74 +78,54 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray})=>{
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
         <div>
-        <div >Here we can change settings for the counter</div>
-        <div className='audioRow'> Polling Speed Source: <select>
-            <option> Numerical </option>
-            <option> Slider</option>
-        </select> </div>
-            {rulesArray.map((element, index, array)=>{
-                return (<div className='audioRow'>
-                    <select onChange={(e)=>{changeFile(index, e.target.value)}}>
-                        <option value={-1}>none</option>
-                        {mediaArray.map((mediaArrayFile, index, array)=>{
-                            return(
-                                <option selected={mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0] === element.file} value={index}>
-                                    {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
-                                </option>)})}
-                    </select>
-                    <select onChange={(e)=>{changeFunction(index, e.target.value)}}>
-                        {functionArray.map((functionArrayFunction, index, array)=>{
-                            return(
-                                <option value={index}>
-                                    {functionArrayFunction.description}
-                                </option>
-                            )
-                        })}
-                    </select>
-                    <>
-                    { rulesArray[index].function !== 'once' &&
-                        rulesArray[index].function !== 'sliderDecrease' &&
-                        rulesArray[index].function !== 'sliderIncrease' &&
-                    <>
-                        <input onInput={(e)=>{changeValueOne(index, e.target.value)}}></input>
-                        <select onChange={(e)=>{changeValueOne(index, e.target.value)}}>
-                            <option value='1000'>1000ms</option>
-                            <option value='2000'>2000ms</option>
-                            <option value='3000'>3000ms</option>
-                            <option value='4000'>4000ms</option>
-                            <option value='5000'>5000ms</option>
-                            <option value='6000'>6000ms</option>
-                            <option value='7000'>7000ms</option>
-                            <option value='8000'>8000ms</option>
-                            <option value='9000'>9000ms</option>
-                            <option value='10000'>10000ms</option>
+            <div >Here we can change settings for the counter</div>
+            <div className='audioRow'> Polling Speed Source: 
+                <select onChange={(e)=>{setPollingSpeedSource(e.target.value)}}>
+                    <option value='numerical'> Numerical </option>
+                    <option value='slider'> Slider</option>
+                </select> 
+                {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
+            </div>
+                {rulesArray.map((element, index, array)=>{
+                    return (<div className='audioRow'>
+                        <select onChange={(e)=>{changeFile(index, e.target.value)}}>
+                            <option value={-1}>none</option>
+                            {mediaArray.map((mediaArrayFile, index, array)=>{
+                                return(
+                                    <option selected={mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0] === element.file} value={index}>
+                                        {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
+                                    </option>)})}
                         </select>
-                        { !rulesArray[index].function === 'timer' &&
-                            !rulesArray[index].function === 'delayOnce' &&
-                            !rulesArray[index].function === 'delayTimer' &&
-                            !rulesArray[index].function === 'sliderDecreaseTimer' &&
-                            !rulesArray[index].function === 'sliderIncreaseTimer' &&
-                            <select onChange={(e)=>{changeValueTwo(index, e.target.value)}}>
-                                <option value='1000'>1000ms</option>
-                                <option value='2000'>2000ms</option>
-                                <option value='3000'>3000ms</option>
-                                <option value='4000'>4000ms</option>
-                                <option value='5000'>5000ms</option>
-                                <option value='6000'>6000ms</option>
-                                <option value='7000'>7000ms</option>
-                                <option value='8000'>8000ms</option>
-                                <option value='9000'>9000ms</option>
-                                <option value='10000'>10000ms</option>
-                            </select>
+                        <select onChange={(e)=>{changeFunction(index, e.target.value)}}>
+                            {functionArray.map((functionArrayFunction, index, array)=>{
+                                return(
+                                    <option value={index}>
+                                        {functionArrayFunction.description}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                        <>
+                        { rulesArray[index].function !== 'once' &&
+                            rulesArray[index].function !== 'sliderDecrease' &&
+                            rulesArray[index].function !== 'sliderIncrease' &&
+                        <>
+                            <input onInput={(e)=>{changeValueOne(index, e.target.value)}}></input>
+                            { !rulesArray[index].function === 'timer' &&
+                                !rulesArray[index].function === 'delayOnce' &&
+                                !rulesArray[index].function === 'delayTimer' &&
+                                !rulesArray[index].function === 'sliderDecreaseTimer' &&
+                                !rulesArray[index].function === 'sliderIncreaseTimer' &&
+                                <input onInput={(e)=>{changeValueTwo(index, e.target.value)}}></input>
+                            }
+                        </>
                         }
-                    </>
-                    }
-                    </>
-                    <button onClick={()=>{removeRule(index)}}>
-                        -
-                    </button>
-                </div>)
-            })}
+                        </>
+                        <button onClick={()=>{removeRule(index)}}>
+                            -
+                        </button>
+                    </div>)
+                })}
             <button className='addRule' onClick={addRule}>+</button>
         </div>
     </>

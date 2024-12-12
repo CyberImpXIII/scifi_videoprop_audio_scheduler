@@ -1,29 +1,32 @@
 import { useState, useEffect, useRef, createRef } from "react"
-import quitBtnHandler from "../functions/quitBtnHandler"
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext})=>{
+const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, pollingSpeed, pollingSpeedSource})=>{
     const [sliderVal, setSliderVal] = useState(50);
     const [elementsContext, setElementsContext] = useState([]);
     const [elementsRef, setElementsRef] = useState(useRef(mediaArray.map(() => createRef())));
     const [amount, setAmount] = useState(0);
-    const [speed, setSpeed] = useState(1000)
     const [positionArray, setPositionArray] = useState([[0,0]])
     const [stopArray, setStopArray] = useState([])
 
+    const pollingHandler = ()=>{
+        setPositionArray((prevPositionArray)=>[...prevPositionArray, [prevPositionArray.length, prevPositionArray.length]])
+        setAmount((prevAmount)=> prevAmount + 1)
+    }
+
+    const speedHandler = ()=>{
+        if(pollingSpeedSource === 'numerical'){
+            return pollingSpeed
+        } else if(pollingSpeedSource === 'slider'){
+            return sliderVal
+        }
+    }
 
     useEffect(()=>{
-        const myInterval = setInterval(()=>{
-            setAmount((prevAmount)=> prevAmount + 1)
-        }, speed)
+        const myInterval = setInterval(pollingHandler, speedHandler());
         return ()=>clearInterval(myInterval);
-    },[])
-
-    useEffect(()=>{
-        setPositionArray([...positionArray, [amount, amount]])
-    },[amount])
-
+    },[pollingSpeedSource, sliderVal])
 
     useEffect(() => {
         if (Array.isArray(elementsRef.current) && elementsRef.current[0] && elementsRef.current[0].current !== null && elementsContext.length === 0) {
@@ -126,13 +129,14 @@ const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext})=>{
 
 
     return(
+
         <>
             <button onClick={playButtonHandler} key='startbutton'>Start  </button>
             <button key='stopbutton' onClick={()=>{stopHandler(stopArray)}}>Stop </button>
             <button key='pausebutton'>Pause </button>
             <button key='configmenubutton' onClick={()=>{setConfig(!config)}}>Configuration </button>
             <div style={{paddingTop:'35px', width:'50vw', position:'absolute', left:'25vw'}}>
-                <Slider />
+                <Slider defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
             </div>
 
             <div style={{paddingTop:'65px', position:'absolute', width:'100%'}}>
