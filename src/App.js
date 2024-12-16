@@ -10,6 +10,10 @@ function App() {
   const [rulesArray, setRulesArray]= useState([])
   const [pollingSpeed, setPollingSpeed] = useState(1000)
   const [pollingSpeedSource, setPollingSpeedSource] = useState('numerical');
+  const [Xincrease, setXincrease] = useState(1000)
+  const [XincreaseSource, setXincreaseSource] = useState('numerical');
+  const [Yincrease, setYincrease] = useState(1000)
+  const [YincreaseSource, setYincreaseSource] = useState('numerical');
   const baseContext = new AudioContext()
 
   const audioVisibilityHandler =(prop)=>{
@@ -24,6 +28,14 @@ function App() {
         setMediaArray(data);
       })
      ) : ( console.log('electron not loaded'))
+
+     window.api ? (
+      window.api.dataObjectReceive((data)=>{
+        let temp = data.rulesArray.slice()
+        setRulesArray([...temp])
+      })
+     ) : ( console.log('electron not loaded'))
+
 
      window.api ? 
       (window.api.requestAudio()) : 

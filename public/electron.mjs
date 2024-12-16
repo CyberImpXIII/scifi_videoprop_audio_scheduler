@@ -9,7 +9,6 @@ const store = new Store();
 
 let audioDir = store.get('audioDir') ? store.get('audioDir') : '/'
 let configLocation =''
-let mediaFileArray=[]
 let mainWindow;
 // Initializing the Electron Window
 const createWindow = () => {
@@ -60,10 +59,6 @@ app.whenReady().then(async (event) => {
   ipcMain.on('config-dir-set',(event, args_=>{
     audioDir = dialog.showOpenDialogSync({ properties: ['openDirectory']})
 
-    mediaFileArray = readdirSync(audioDir).map(fileName => {
-      return path.join(audioDir, fileName);
-    });
-
     let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
     event.sender.send('media-array-recieve', dirContents)
   }))
@@ -76,14 +71,12 @@ ipcMain.on('load-config',(event, arg)=>{
   if(dataObj){
     audioDir = dataObj.audioDirectory
     configLocation = dataObj.configFileLocation
+    
   }
-
-  mediaFileArray = readdirSync(audioDir).map(fileName => {
-    return path.join(audioDir, fileName);
-  });
 
   let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
   event.sender.send('media-array-recieve', dirContents)
+  event.sender.send('data-object-recieve', dataObj)
 })
 
 ipcMain.on('save-config', (_event, args)=>{
@@ -95,9 +88,9 @@ ipcMain.on('save-config', (_event, args)=>{
     "displayMode":"dev"
   `
   if(args && args.length >0){
-    string +=`,
-    "rulesArray":${JSON.stringify(args)}`
-
+    args.array.forEach(element => {
+      string += `"${JSON.stringify(element[0])}":"${JSON.stringify(element[1])}` 
+    });
   }
   string += `}`
   writeFileSync(`${configLocation}/config.JSON`,string, (err) => {
