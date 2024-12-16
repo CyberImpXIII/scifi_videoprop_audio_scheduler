@@ -101,9 +101,15 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, polli
                     return (<div className='audioRow'>
                         <select onChange={(e)=>{changeFile(index, e.target.value)}}>
                             <option value={-1}>none</option>
+                            {console.log(element)}
                             {mediaArray.map((mediaArrayFile, index, array)=>{
+                                let selectedCheck = (()=>{
+                                    let mediaArrayFileTemp = mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]
+                                    let rulesFileTemp = element.file.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]
+                                    return rulesFileTemp === mediaArrayFileTemp;
+                                })()
                                 return(
-                                    <option selected={mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0] === element.file} value={index}>
+                                    <option selected={selectedCheck} value={index}>
                                         {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
                                     </option>)})}
                         </select>
