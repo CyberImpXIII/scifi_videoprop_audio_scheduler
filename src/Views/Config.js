@@ -71,18 +71,18 @@ const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArr
     return(
     <>
         <button key='loadbutton' onClick={loadBtnHandler}>Load</button>
-        <button key='savebutton' onClick={()=>{saveBtnHandler(['rulesArray',rulesArray], ["pollingSpeedSource", pollingSpeedSource], ["pollingSpeed", pollingSpeed])}}>Save</button>
+        <button key='savebutton' onClick={()=>{saveBtnHandler(['rulesArray',rulesArray], ["pollingSpeedSource", pollingSpeedSource], ["pollingSpeed", pollingSpeed], [''], [])}}>Save</button>
         <button key='dirpathbutton' onClick={configDirSet}>Configure Directory Path</button>
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
         <div>
             <div >Here we can change settings for the counter</div>
             <div className='audioRow'> Polling Speed Source: 
-                <select onChange={(e)=>{setPollingSpeedSource(e.target.value)}}>
+                <select defaultValue={dataObj && dataObj.pollingSpeedSource ? dataObj.pollingSpeedSource : 'numerical'} onChange={(e)=>{setPollingSpeedSource(e.target.value)}}>
                     <option value='numerical'> Numerical </option>
                     <option value='slider'> Slider</option>
                 </select>  
-                {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
+                {pollingSpeedSource === 'numerical' && <input type='number' defaultValue={dataObj && dataObj.pollingSpeed ? dataObj.pollingSpeed : 1000} onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
             </div>
             <div className='audioRow'> X increase per poll source: 
                 <select onChange={(e)=>{setPollingSpeedSource(e.target.value)}}>
