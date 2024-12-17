@@ -1,11 +1,11 @@
 import loadBtnHandler from '../functions/loadBtnHandler'
 import saveBtnHandler from '../functions/saveBtnHandler'
 import configDirSet from '../functions/configDirSet'
+import { useEffect, useState } from 'react'
 import '../styles/config.css'
-import { useState } from 'react'
 
-
-const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
+const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
+    const [rerender, setRerender] = useState(false)
     const functionArray = [{value:'none', description: 'nothing happens'},
         {value:'once', description:'Play once on play button start'},
         {value:'timer', description:'Play on timer'},
@@ -64,13 +64,14 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, polli
         temp[index].valueTwo = value
         setRulesArray([...temp])   
     }
-
-
+    useEffect(()=>{
+        setRerender(!rerender);
+    },[dataObj])
 
     return(
     <>
         <button key='loadbutton' onClick={loadBtnHandler}>Load</button>
-        <button key='savebutton' onClick={()=>{saveBtnHandler([['rulesArray',rulesArray]])}}>Save</button>
+        <button key='savebutton' onClick={()=>{saveBtnHandler(['rulesArray',rulesArray], ["test", 'hello'])}}>Save</button>
         <button key='dirpathbutton' onClick={configDirSet}>Configure Directory Path</button>
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
@@ -97,24 +98,18 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, polli
                 </select> 
                 {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
             </div>
-                {rulesArray.map((element, index, array)=>{
+                {rulesArray.map((element, index)=>{
                     return (<div className='audioRow'>
-                        <select onChange={(e)=>{changeFile(index, e.target.value)}}>
+                        <select key={`${element.value}${index}${rerender}file`} defaultValue={mediaArray.findIndex((file)=>file===element.file)} onChange={(e)=>{changeFile(index, e.target.value)}}>
                             <option value={-1}>none</option>
-                            {console.log(element)}
-                            {mediaArray.map((mediaArrayFile, index, array)=>{
-                                let selectedCheck = (()=>{
-                                    let mediaArrayFileTemp = mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]
-                                    let rulesFileTemp = element.file.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]
-                                    return rulesFileTemp === mediaArrayFileTemp;
-                                })()
+                            {mediaArray.map((mediaArrayFile, index)=>{
                                 return(
-                                    <option selected={selectedCheck} value={index}>
+                                    <option value={index}>
                                         {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
                                     </option>)})}
                         </select>
-                        <select onChange={(e)=>{changeFunction(index, e.target.value)}}>
-                            {functionArray.map((functionArrayFunction, index, array)=>{
+                        <select defaultValue={functionArray.findIndex((functionArrayFunction)=>functionArrayFunction.value===element.function)} onChange={(e)=>{changeFunction(index, e.target.value)}}>
+                            {functionArray.map((functionArrayFunction, index)=>{
                                 return(
                                     <option value={index}>
                                         {functionArrayFunction.description}
@@ -127,13 +122,12 @@ const Config = ({setConfig, config, mediaArray, rulesArray, setRulesArray, polli
                             rulesArray[index].function !== 'sliderDecrease' &&
                             rulesArray[index].function !== 'sliderIncrease' &&
                         <>
-                            <input onInput={(e)=>{changeValueOne(index, e.target.value)}}></input>
-                            { !rulesArray[index].function === 'timer' &&
-                                !rulesArray[index].function === 'delayOnce' &&
-                                !rulesArray[index].function === 'delayTimer' &&
-                                !rulesArray[index].function === 'sliderDecreaseTimer' &&
-                                !rulesArray[index].function === 'sliderIncreaseTimer' &&
-                                <input onInput={(e)=>{changeValueTwo(index, e.target.value)}}></input>
+                            <input defaultValue={dataObj.rulesArray && dataObj.rulesArray.length > 0 && dataObj.rulesArray[index] && dataObj.rulesArray[index].valueOne} onInput={(e)=>{changeValueOne(index, e.target.value)}}></input>
+                            { rulesArray[index].function !== 'timer' &&
+                                rulesArray[index].function !== 'delayOnce' &&
+                                rulesArray[index].function !== 'sliderDecreaseTimer' &&
+                                rulesArray[index].function !== 'sliderIncreaseTimer' &&
+                                <input defaultValue={dataObj.rulesArray && dataObj.rulesArray.length > 0 && dataObj.rulesArray[index] && dataObj.rulesArray[index].valueTwo} onInput={(e)=>{changeValueTwo(index, e.target.value)}}></input>
                             }
                         </>
                         }

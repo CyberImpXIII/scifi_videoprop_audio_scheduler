@@ -1,4 +1,4 @@
-const saveBtnHandler = (rulesArray)=>{
+const saveBtnHandler = (...rulesArray)=>{
     window.api.saveConfig(rulesArray)
   }
 

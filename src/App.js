@@ -10,6 +10,7 @@ function App() {
   const [rulesArray, setRulesArray]= useState([])
   const [pollingSpeed, setPollingSpeed] = useState(1000)
   const [pollingSpeedSource, setPollingSpeedSource] = useState('numerical');
+  const [dataObj, setDataObj] = useState({})
   const [Xincrease, setXincrease] = useState(1000)
   const [XincreaseSource, setXincreaseSource] = useState('numerical');
   const [Yincrease, setYincrease] = useState(1000)
@@ -33,6 +34,7 @@ function App() {
       window.api.dataObjectReceive((data)=>{
         let temp = data.rulesArray.slice()
         setRulesArray([...temp])
+        setDataObj(data);
       })
      ) : ( console.log('electron not loaded'))
 
@@ -53,7 +55,7 @@ function App() {
   return (
     <div className="App" style={{position:'absolute', width:'100%'}}>
       {config ?
-      <Config pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
+      <Config dataObj={dataObj} pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
       :
       <MainPage setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} pollingSpeedSource={pollingSpeedSource} baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState}/>
       }

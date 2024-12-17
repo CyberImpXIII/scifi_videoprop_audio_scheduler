@@ -45,23 +45,19 @@ const createWindow = () => {
 
 };
 
-
-
 // When the app is ready to load
 app.whenReady().then(async (event) => {
-
-
 
   ipcMain.on('quit-app',(args_=>{
     app.quit();
   }))
 
-  ipcMain.on('config-dir-set',(event, args_=>{
-    audioDir = dialog.showOpenDialogSync({ properties: ['openDirectory']})
-
-    let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
-    event.sender.send('media-array-recieve', dirContents)
-  }))
+ipcMain.on('config-dir-set',(event, args)=>{
+  console.log('event', args);
+  audioDir = dialog.showOpenDialogSync({ properties: ['openDirectory']})[0]
+  let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
+  event.sender.send('media-array-recieve', dirContents)
+})
 
 ipcMain.on('load-config',(event, arg)=>{
   let dataObj = JSON.parse(readFileSync(dialog.showOpenDialogSync({ 
@@ -71,7 +67,6 @@ ipcMain.on('load-config',(event, arg)=>{
   if(dataObj){
     audioDir = dataObj.audioDirectory
     configLocation = dataObj.configFileLocation
-    
   }
 
   let dirContents = readdirSync(audioDir).filter((item)=>(item.includes('.mp3'))).map((item)=>{ return ('file://' + audioDir + "/" + item) });
@@ -80,16 +75,15 @@ ipcMain.on('load-config',(event, arg)=>{
 })
 
 ipcMain.on('save-config', (_event, args)=>{
-  console.log(args)
   configLocation = dialog.showOpenDialogSync({ properties: ['openDirectory']})
   let string =  `{
     "audioDirectory": "${audioDir}",
     "configFileLocation": "${configLocation}",
-    "displayMode":"dev"
   `
-  if(args && args.length >0){
-    args.array.forEach(element => {
-      string += `"${JSON.stringify(element[0])}":"${JSON.stringify(element[1])}` 
+  if(args && args.length > 0){
+    args.forEach((element, index) => {
+      console.log(element)
+      string += `${JSON.stringify(element[0])}:${JSON.stringify(element[1])}` + (index < args.length - 1 ? "," : "") + `\n`
     });
   }
   string += `}`
@@ -117,7 +111,6 @@ app.on('window-all-closed', () => {
 
 // Activating the app
 app.on('activate', () => {
-  console.log(mainWindow)
   if (!mainWindow) {
     createWindow();
   }
