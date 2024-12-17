@@ -55,9 +55,9 @@ function App() {
   return (
     <div className="App" style={{position:'absolute', width:'100%'}}>
       {config ?
-      <Config dataObj={dataObj} pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
+      <Config key={`configpage`} dataObj={dataObj} pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
       :
-      <MainPage setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} pollingSpeedSource={pollingSpeedSource} baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState}/>
+      <MainPage key={`mainpage`} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} pollingSpeedSource={pollingSpeedSource} baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState}/>
       }
     </div>
   );

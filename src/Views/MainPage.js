@@ -76,14 +76,14 @@ const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, polli
                     playhandler('', mediaArray.findIndex((string)=>{return (string === element.file)}));
                     break;
                 case 'timer':
-                    setInterval(()=>{
+                    setStopArray([...stopArray, setInterval(()=>{
                         playhandler('', mediaArray.findIndex((string)=>{return (string === element.file)}));
-                    }, element.valueOne)
+                    }, element.valueOne)]);
                     break;
                 case 'delayOnce':
-                    setTimeout(()=>{
+                    setStopArray([...stopArray, setTimeout(()=>{
                         playhandler('', mediaArray.findIndex((string)=>{return (string === element.file)}));
-                    }, element.valueOne)
+                    }, element.valueOne)])
                     break;
                 case 'delayTimer':
                     setTimeout(()=>{
@@ -134,17 +134,17 @@ const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, polli
             <button onClick={playButtonHandler} key='startbutton'>Start  </button>
             <button key='stopbutton' onClick={()=>{stopHandler(stopArray)}}>Stop </button>
             <button key='pausebutton'>Pause </button>
-            <button key='configmenubutton' onClick={()=>{setConfig(!config)}}>Configuration </button>
-            <div style={{paddingTop:'35px', width:'50vw', position:'absolute', left:'25vw'}}>
+            <button key='configmenubutton' onClick={()=>{stopHandler(stopArray); setConfig(!config);}}>Configuration </button>
+            <div key={'sliderparent'} style={{paddingTop:'35px', width:'50vw', position:'absolute', left:'25vw'}}>
                 <Slider defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
             </div>
 
-            <div style={{paddingTop:'65px', position:'absolute', width:'100%'}}>
+            <div key='svgparent' style={{paddingTop:'65px', position:'absolute', width:'100%'}}>
                 <svg style={{fill:'black', stroke:'black'}}>
                     {positionArray.map((element, position, fullArray)=>{
                         return(position === 0 ? 
-                        <path style={{fill:'black', stroke:'black'}} d='M0 0'/> :
-                        <path style={{fill:'black', stroke:'black'}} d={`M${fullArray[position-1][0]} ${fullArray[position-1][1]} L${element[0]} ${element[1]}`}/>)
+                        <path key={`startpath`} style={{fill:'black', stroke:'black'}} d='M0 0'/> :
+                        <path key={`${position}path`} style={{fill:'black', stroke:'black'}} d={`M${fullArray[position-1][0]} ${fullArray[position-1][1]} L${element[0]} ${element[1]}`}/>)
                     })}
                 </svg>
             </div>

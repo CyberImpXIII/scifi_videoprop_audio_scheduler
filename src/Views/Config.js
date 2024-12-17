@@ -71,7 +71,7 @@ const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArr
     return(
     <>
         <button key='loadbutton' onClick={loadBtnHandler}>Load</button>
-        <button key='savebutton' onClick={()=>{saveBtnHandler(['rulesArray',rulesArray], ["test", 'hello'])}}>Save</button>
+        <button key='savebutton' onClick={()=>{saveBtnHandler(['rulesArray',rulesArray], ["pollingSpeedSource", pollingSpeedSource], ["pollingSpeed", pollingSpeed])}}>Save</button>
         <button key='dirpathbutton' onClick={configDirSet}>Configure Directory Path</button>
         <button key='defaultbutton'>Restore Default</button>
         <button key='backbutton' onClick={()=>{setConfig(!config)}}>Back</button>
@@ -99,19 +99,19 @@ const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArr
                 {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
             </div>
                 {rulesArray.map((element, index)=>{
-                    return (<div className='audioRow'>
+                    return (<div key={`${index}rule`} className='audioRow'>
                         <select key={`${element.value}${index}${rerender}file`} defaultValue={mediaArray.findIndex((file)=>file===element.file)} onChange={(e)=>{changeFile(index, e.target.value)}}>
                             <option value={-1}>none</option>
-                            {mediaArray.map((mediaArrayFile, index)=>{
+                            {mediaArray.map((mediaArrayFile, mediaIndex)=>{
                                 return(
-                                    <option value={index}>
+                                    <option key={`${index}file${mediaIndex}`} value={mediaIndex}>
                                         {mediaArrayFile.split('/')[mediaArrayFile.split('/').length - 1].split('.mp3')[0]}
                                     </option>)})}
                         </select>
                         <select defaultValue={functionArray.findIndex((functionArrayFunction)=>functionArrayFunction.value===element.function)} onChange={(e)=>{changeFunction(index, e.target.value)}}>
-                            {functionArray.map((functionArrayFunction, index)=>{
+                            {functionArray.map((functionArrayFunction, functionIndex)=>{
                                 return(
-                                    <option value={index}>
+                                    <option key={`${index}function${functionIndex}`} value={functionIndex}>
                                         {functionArrayFunction.description}
                                     </option>
                                 )
