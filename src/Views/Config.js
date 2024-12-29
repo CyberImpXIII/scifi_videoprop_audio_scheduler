@@ -4,7 +4,7 @@ import configDirSet from '../functions/configDirSet'
 import { useEffect, useState } from 'react'
 import '../styles/config.css'
 
-const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
+const Config = ({Xincrease, setXincrease, XincreaseSource, setXincreaseSource, Yincrease, setYincrease, YincreaseSource, setYincreaseSource, dataObj, setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
     const [rerender, setRerender] = useState(false)
     const functionArray = [{value:'none', description: 'nothing happens'},
         {value:'once', description:'Play once on play button start'},
@@ -20,13 +20,12 @@ const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArr
         {value:'none', description:'----------------------'},
     ]
 
-    const counterFunctionArray = [
-        {value:'counterRate', description:'Set the amount per time that the counter increases by (how much per refresh)'},
+ /*  counterFunctionToDo = [
         {value:'setMax', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'setMin', description:'Set the amount per time that the counter increases by (how much per refresh)'},
         {value:'none', description:'----------------------'}
-    ]
+    ]*/
 
     const addRule = ()=>{
         let temp = rulesArray.slice()
@@ -98,6 +97,9 @@ const Config = ({dataObj, setConfig, config, mediaArray, rulesArray, setRulesArr
                 </select> 
                 {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
             </div>
+            <div className='audioRow'>Here you can adjust rules relating to the User interface</div>
+
+            <div className='audioRow'>Here you can add and adjust rules relating timers and the audio files</div>
                 {rulesArray.map((element, index)=>{
                     return (<div key={`${index}rule`} className='audioRow'>
                         <select key={`${element.value}${index}${rerender}file`} defaultValue={mediaArray.findIndex((file)=>file===element.file)} onChange={(e)=>{changeFile(index, e.target.value)}}>

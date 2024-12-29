@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, createRef } from "react"
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-
-const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, pollingSpeed, pollingSpeedSource})=>{
+import '../styles/mainPage.css'
+const MainPage = ({Xincrease, setXincrease, XincreaseSource, setXincreaseSource, Yincrease, setYincrease, YincreaseSource, setYincreaseSource, setConfig, config, rulesArray, mediaArray, baseContext, pollingSpeed, pollingSpeedSource, buttonText})=>{
     const [sliderVal, setSliderVal] = useState(50);
     const [elementsContext, setElementsContext] = useState([]);
     const [elementsRef, setElementsRef] = useState(useRef(mediaArray.map(() => createRef())));
@@ -12,7 +12,7 @@ const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, polli
 
     const pollingHandler = ()=>{
         setPositionArray((prevPositionArray)=>[...prevPositionArray, [prevPositionArray.length, prevPositionArray.length]])
-        setAmount((prevAmount)=> prevAmount + 1)
+        setAmount((prevAmount)=> prevAmount + Yincrease)
     }
 
     const speedHandler = ()=>{
@@ -135,18 +135,30 @@ const MainPage = ({setConfig, config, rulesArray, mediaArray, baseContext, polli
             <button key='stopbutton' onClick={()=>{stopHandler(stopArray)}}>Stop </button>
             <button key='pausebutton'>Pause </button>
             <button key='configmenubutton' onClick={()=>{stopHandler(stopArray); setConfig(!config);}}>Configuration </button>
-            <div key={'sliderparent'} style={{paddingTop:'35px', width:'50vw', position:'absolute', left:'25vw'}}>
-                <Slider defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
-            </div>
+            <div id="UIParent">
+                <div key={'sliderparent'} className='sliderContainer'>
+                    <Slider id='sliderOne' vertical={true} defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
+                    <Slider id='sliderTwo' vertical={true} defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
+                    <Slider id='sliderThree' vertical={true} defaultValue={50} onChange={(value)=>{setSliderVal(value)}} />
+                </div>
 
-            <div key='svgparent' style={{paddingTop:'65px', position:'absolute', width:'100%'}}>
-                <svg style={{fill:'black', stroke:'black'}}>
-                    {positionArray.map((element, position, fullArray)=>{
-                        return(position === 0 ? 
-                        <path key={`startpath`} style={{fill:'black', stroke:'black'}} d='M0 0'/> :
-                        <path key={`${position}path`} style={{fill:'black', stroke:'black'}} d={`M${fullArray[position-1][0]} ${fullArray[position-1][1]} L${element[0]} ${element[1]}`}/>)
-                    })}
-                </svg>
+                <div key='svgparent' style={{display:'flex', flexDirection:'column', width:'30vw', border:'solid black 1px', marginTop:'35px'}}>
+                    <div id='radialGraph' style={{width:'100%', height:'50%'}}></div>
+                    <div id='lineGraph' style={{width:'100%', height:'50%'}}>
+                        <svg style={{fill:'black', stroke:'black'}}>
+                            {positionArray.map((element, position, fullArray)=>{
+                                return(position === 0 ? 
+                                <path key={`startpath`} style={{fill:'black', stroke:'black'}} d='M0 0'/> :
+                                <path key={`${position}path`} style={{fill:'black', stroke:'black'}} d={`M${fullArray[position-1][0]} ${fullArray[position-1][1]} L${element[0]} ${element[1]}`}/>)
+                            })}
+                        </svg>
+                    </div>
+
+                </div>
+                <div id='buttonParent'>
+                    <button className='button'></button>
+                    {buttonText}
+                </div>
             </div>
             
             <div style={{display:'none'}}>

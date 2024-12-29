@@ -1,0 +1,60 @@
+.sliderContainer{
+    height:80vh;
+    display:flex;
+    padding-top:35px;
+    width:25vw;
+    justify-content:space-between;
+    margin-left:5vw;
+    margin-right:5vw;
+}
+
+.graphContainer{
+    width:100%;
+    height:100%;
+}
+
+.button{
+    width:5vw;
+    height:5vw;
+    border-radius:50%;
+    border:solid rgb(57, 57, 57) 1px;
+    background-color:rgb(57, 57, 57);
+    color:white;
+}
+
+.rc-slider{
+    width:45px!important
+}
+
+.rc-slider-rail{
+    width:25px!important;
+    height:100%!important;
+}
+
+.rc-slider-handle{
+    width:45px!important;
+    height:25px!important;
+    margin-left:0px!important;
+    transform: translateX(-25%)!important;
+    border-radius: 15%!important;
+}
+
+.rc-slider-track{
+    width:25px!important;
+}
+
+#sliderOne > .rc-slider-track{
+    background-color:red!important;
+}
+
+#sliderTwo > .rc-slider-track{
+    background-color:greenyellow!important;
+}
+
+#sliderThree > .rc-slider-track{
+    background-color:blue!important;
+}
+
+#UIParent{
+    display:flex;
+}
