@@ -15,6 +15,8 @@ function App() {
   const [XincreaseSource, setXincreaseSource] = useState('numerical');
   const [Yincrease, setYincrease] = useState(1000)
   const [YincreaseSource, setYincreaseSource] = useState('numerical');
+  const [buttonTextOne, setButtonTextOne] = useState('')
+  const [buttonTextTwo, setButtonTextTwo] = useState('')
   const baseContext = new AudioContext()
 
   const audioVisibilityHandler =(prop)=>{
@@ -55,9 +57,9 @@ function App() {
   return (
     <div className="App" style={{position:'absolute', width:'100%'}}>
       {config ?
-      <Config key={`configpage`} Xincrease={Xincrease} setXincrease={setXincrease} XincreaseSource={XincreaseSource} setXincreaseSource={setXincreaseSource} Yincrease={Yincrease} setYincrease={setYincrease} YincreaseSource={YincreaseSource} setYincreaseSource={setYincreaseSource} dataObj={dataObj} pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
+      <Config buttonTextOne={buttonTextOne} buttonTextTwo={buttonTextTwo} setButtonTextOne={setButtonTextOne} setButtonTextTwo={setButtonTextTwo} key={`configpage`} Xincrease={Xincrease} setXincrease={setXincrease} XincreaseSource={XincreaseSource} setXincreaseSource={setXincreaseSource} Yincrease={Yincrease} setYincrease={setYincrease} YincreaseSource={YincreaseSource} setYincreaseSource={setYincreaseSource} dataObj={dataObj} pollingSpeedSource={pollingSpeedSource} setPollingSpeedSource={setPollingSpeedSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} rulesArray={rulesArray} setRulesArray={setRulesArray} mediaArray={mediaArray} setMediaArray={setMediaArray} config={config} setConfig={setConfig}/>
       :
-      <MainPage key={`mainpage`} Xincrease={Xincrease} setXincrease={setXincrease} XincreaseSource={XincreaseSource} setXincreaseSource={setXincreaseSource} Yincrease={Yincrease} setYincrease={setYincrease} YincreaseSource={YincreaseSource} setYincreaseSource={setYincreaseSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} pollingSpeedSource={pollingSpeedSource} baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState}/>
+      <MainPage buttonTextOne={buttonTextOne} buttonTextTwo={buttonTextTwo} key={`mainpage`} Xincrease={Xincrease} setXincrease={setXincrease} XincreaseSource={XincreaseSource} setXincreaseSource={setXincreaseSource} Yincrease={Yincrease} setYincrease={setYincrease} YincreaseSource={YincreaseSource} setYincreaseSource={setYincreaseSource} setPollingSpeed={setPollingSpeed} pollingSpeed={pollingSpeed} pollingSpeedSource={pollingSpeedSource} baseContext={baseContext} mediaArray={mediaArray} rulesArray={rulesArray} setConfig={setConfig} config={config} buttonState={buttonState}/>
       }
     </div>
   );
