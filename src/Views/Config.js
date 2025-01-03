@@ -4,7 +4,7 @@ import configDirSet from '../functions/configDirSet'
 import { useEffect, useState } from 'react'
 import '../styles/config.css'
 
-const Config = ({Xincrease, setXincrease, XincreaseSource, setXincreaseSource, Yincrease, setYincrease, YincreaseSource, setYincreaseSource, dataObj, setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed})=>{
+const Config = ({Xincrease, setXincrease, XincreaseSource, setXincreaseSource, Yincrease, setYincrease, YincreaseSource, setYincreaseSource, dataObj, setConfig, config, mediaArray, rulesArray, setRulesArray, pollingSpeedSource, setPollingSpeedSource, pollingSpeed, setPollingSpeed, setButtonTextOne, setButtonTextTwo})=>{
     const [rerender, setRerender] = useState(false)
     const functionArray = [{value:'none', description: 'nothing happens'},
         {value:'once', description:'Play once on play button start'},
@@ -98,7 +98,10 @@ const Config = ({Xincrease, setXincrease, XincreaseSource, setXincreaseSource, Y
                 {pollingSpeedSource === 'numerical' && <input type='number' onChange={(e)=>{setPollingSpeed(e.target.value)}}></input>}
             </div>
             <div className='audioRow'>Here you can adjust rules relating to the User interface</div>
-
+                <div className='audioRow'>What text would you like to display next to button one?</div>
+                <input type='text' onChange={(e)=>{setButtonTextOne(e.target.value)}}></input>
+                <div className='audioRow'>What text would you like to display next to button two?</div>
+                <input type='text' onChange={(e)=>{setButtonTextTwo(e.target.value)}}></input>
             <div className='audioRow'>Here you can add and adjust rules relating timers and the audio files</div>
                 {rulesArray.map((element, index)=>{
                     return (<div key={`${index}rule`} className='audioRow'>
